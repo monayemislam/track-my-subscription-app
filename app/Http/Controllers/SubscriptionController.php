@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Facades\Gate;
 
 class SubscriptionController extends Controller
 {
@@ -102,7 +103,7 @@ class SubscriptionController extends Controller
      */
     public function update(Request $request, Subscription $subscription): RedirectResponse
     {
-        $this->authorize('update', $subscription);
+        Gate::authorize('update', $subscription);
 
         $validated = $request->validate([
             'category_id' => ['required', 'exists:categories,id'],
@@ -126,7 +127,7 @@ class SubscriptionController extends Controller
      */
     public function destroy(Subscription $subscription): RedirectResponse
     {
-        $this->authorize('delete', $subscription);
+        Gate::authorize('delete', $subscription);
 
         $subscription->delete();
 

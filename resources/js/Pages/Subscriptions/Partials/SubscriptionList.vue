@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import SubscriptionCard from '@/Components/Subscription/SubscriptionCard.vue';
 import EditSubscriptionModal from './EditSubscriptionModal.vue';
 import Pagination from '@/Components/Pagination.vue';
+import { useToast } from '@/Composables/useToast';
 
 const props = defineProps({
     subscriptions: Object, // Paginated data
@@ -10,6 +11,7 @@ const props = defineProps({
 });
 
 const editingSubscription = ref(null);
+const { showToast } = useToast();
 </script>
 
 <template>
