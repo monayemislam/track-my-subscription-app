@@ -6,8 +6,14 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 
 const props = defineProps({
-    filters: Object,
-    categories: Array,
+    filters: {
+        type: Object,
+        default: () => ({})
+    },
+    categories: {
+        type: Array,
+        default: () => []
+    }
 });
 
 const form = ref({
@@ -16,12 +22,35 @@ const form = ref({
     sort: props.filters.sort || 'renewal_date,asc'
 });
 
-watch(form, debounce((value) => {
-    router.get(route('subscriptions.index'), value, {
+// Create a debounced search function
+const debouncedSearch = debounce(() => {
+    router.get(route('subscriptions.index'), form.value, {
         preserveState: true,
         preserveScroll: true,
+        replace: true
     });
-}, 300));
+}, 300);
+
+// Watch each form field individually
+watch(() => form.value.search, () => {
+    debouncedSearch();
+});
+
+watch(() => form.value.category, () => {
+    router.get(route('subscriptions.index'), form.value, {
+        preserveState: true,
+        preserveScroll: true,
+        replace: true
+    });
+});
+
+watch(() => form.value.sort, () => {
+    router.get(route('subscriptions.index'), form.value, {
+        preserveState: true,
+        preserveScroll: true,
+        replace: true
+    });
+});
 </script>
 
 <template>
