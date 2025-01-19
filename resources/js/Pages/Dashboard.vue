@@ -1,6 +1,13 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
+import SubscriptionStats from './Dashboard/Partials/SubscriptionStats.vue';
+import CategoryBreakdown from './Dashboard/Partials/CategoryBreakdown.vue';
+import UpcomingRenewals from './Dashboard/Partials/UpcomingRenewals.vue';
+
+defineProps({
+    stats: Object,
+});
 </script>
 
 <template>
@@ -17,11 +24,19 @@ import { Head } from '@inertiajs/vue3';
 
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div
-                    class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
-                >
-                    <div class="p-6 text-gray-900">
-                        You're logged in!
+                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <SubscriptionStats :stats="stats" />
+                    
+                    <div class="lg:col-span-2">
+                        <CategoryBreakdown 
+                            :category-breakdown="stats.categoryBreakdown" 
+                        />
+                    </div>
+                    
+                    <div class="md:col-span-2 lg:col-span-3">
+                        <UpcomingRenewals 
+                            :upcoming-renewals="stats.upcomingRenewals" 
+                        />
                     </div>
                 </div>
             </div>

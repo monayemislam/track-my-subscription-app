@@ -31,13 +31,31 @@ const showingNavigationDropdown = ref(false);
 
                             <!-- Navigation Links -->
                             <div
-                                class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
+                                class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex"
                             >
                                 <NavLink
                                     :href="route('dashboard')"
                                     :active="route().current('dashboard')"
                                 >
                                     Dashboard
+                                </NavLink>
+                                <NavLink
+                                    :href="route('subscriptions.index')"
+                                    :active="route().current('subscriptions.index')"
+                                >
+                                    Subscriptions
+                                </NavLink>
+                                <NavLink
+                                    :href="route('categories.index')"
+                                    :active="route().current('categories.index')"
+                                >
+                                    Categories
+                                </NavLink>
+                                <NavLink
+                                    :href="route('notification-settings.defaults')"
+                                    :active="route().current('notification-settings.defaults')"
+                                >
+                                    Notifications
                                 </NavLink>
                             </div>
                         </div>
@@ -139,12 +157,30 @@ const showingNavigationDropdown = ref(false);
                     }"
                     class="sm:hidden"
                 >
-                    <div class="space-y-1 pb-3 pt-2">
+                    <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink
                             :href="route('dashboard')"
                             :active="route().current('dashboard')"
                         >
                             Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('subscriptions.index')"
+                            :active="route().current('subscriptions.index')"
+                        >
+                            Subscriptions
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('categories.index')"
+                            :active="route().current('categories.index')"
+                        >
+                            Categories
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('notification-settings.defaults')"
+                            :active="route().current('notification-settings.defaults')"
+                        >
+                            Notifications
                         </ResponsiveNavLink>
                     </div>
 
