@@ -21,8 +21,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
-    Route::resource('subscriptions', SubscriptionController::class)
-        ->except(['create', 'edit', 'show']);
+    Route::resource('subscriptions', SubscriptionController::class);
     
     // Fix notification settings routes
     Route::get('/notification-settings/defaults', 

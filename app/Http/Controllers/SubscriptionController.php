@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Subscription;
+use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -47,7 +48,9 @@ class SubscriptionController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Subscriptions/Create', [
+            'categories' => Category::all()
+        ]);
     }
 
     /**
