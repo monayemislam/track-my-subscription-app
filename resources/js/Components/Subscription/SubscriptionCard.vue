@@ -41,6 +41,13 @@ const handleDelete = () => {
         },
     });
 };
+
+const emit = defineEmits(['edit']);
+
+const handleEdit = () => {
+    console.log('Edit button clicked'); // Debug log
+    emit('edit');
+};
 </script>
 
 <template>
@@ -69,7 +76,7 @@ const handleDelete = () => {
         <div class="mt-6 flex justify-between items-center">
             <div class="flex space-x-4">
                 <button
-                    @click="showEditModal = true"
+                    @click="handleEdit"
                     class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors duration-200"
                 >
                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

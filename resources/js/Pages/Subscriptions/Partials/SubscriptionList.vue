@@ -11,7 +11,14 @@ const props = defineProps({
 });
 
 const editingSubscription = ref(null);
+const showEditModal = ref(false);
 const { showToast } = useToast();
+
+const handleEdit = (subscription) => {
+    console.log('Edit clicked:', subscription); // Debug log
+    editingSubscription.value = subscription;
+    showEditModal.value = true;
+};
 </script>
 
 <template>
@@ -25,7 +32,8 @@ const { showToast } = useToast();
                 v-for="subscription in subscriptions.data"
                 :key="subscription.id"
                 :subscription="subscription"
-                @edit="editingSubscription = subscription"
+                :categories="categories"
+                @edit="handleEdit(subscription)"
             />
         </div>
 
@@ -36,9 +44,13 @@ const { showToast } = useToast();
 
         <EditSubscriptionModal
             v-if="editingSubscription"
+            :show="showEditModal"
             :subscription="editingSubscription"
             :categories="categories"
-            @close="editingSubscription = null"
+            @close="() => {
+                showEditModal = false;
+                editingSubscription = null;
+            }"
         />
     </div>
 </template>

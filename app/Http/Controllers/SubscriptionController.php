@@ -101,10 +101,8 @@ class SubscriptionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Subscription $subscription): RedirectResponse
+    public function update(Request $request, Subscription $subscription)
     {
-        Gate::authorize('update', $subscription);
-
         $validated = $request->validate([
             'category_id' => ['required', 'exists:categories,id'],
             'name' => ['required', 'string', 'max:255'],
@@ -119,7 +117,7 @@ class SubscriptionController extends Controller
 
         $subscription->update($validated);
 
-        return redirect()->route('subscriptions.index');
+        return back()->with('success', 'Subscription updated successfully.');
     }
 
     /**
