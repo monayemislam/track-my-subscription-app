@@ -18,31 +18,58 @@ onMounted(() => {
     const data = Object.values(props.categoryBreakdown);
     
     new Chart(ctx, {
-        type: 'doughnut',
+        type: 'bar',
         data: {
             labels: labels,
             datasets: [{
                 data: data,
-                backgroundColor: [
-                    '#FF6384',
-                    '#36A2EB',
-                    '#FFCE56',
-                    '#4BC0C0',
-                    '#9966FF',
-                    '#FF9F40',
-                    '#7CBA3B',
-                ],
+                backgroundColor: '#6366F1',
+                borderRadius: 8,
+                barThickness: 24,
             }],
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    position: 'right',
+                    display: false,
                 },
                 title: {
                     display: true,
                     text: 'Spending by Category',
+                    font: {
+                        size: 16,
+                        family: "'Inter', sans-serif",
+                        weight: '500',
+                    },
+                    padding: {
+                        bottom: 30,
+                    },
+                    color: '#374151',
+                },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false,
+                    },
+                    ticks: {
+                        font: {
+                            family: "'Inter', sans-serif",
+                        },
+                    },
+                },
+                x: {
+                    grid: {
+                        display: false,
+                    },
+                    ticks: {
+                        font: {
+                            family: "'Inter', sans-serif",
+                        },
+                    },
                 },
             },
         },
@@ -52,6 +79,8 @@ onMounted(() => {
 
 <template>
     <div class="rounded-lg bg-white p-6 shadow-sm">
-        <canvas ref="chartCanvas" height="200"></canvas>
+        <div class="h-[400px]">
+            <canvas ref="chartCanvas"></canvas>
+        </div>
     </div>
 </template>

@@ -8,6 +8,13 @@ import UpcomingRenewals from './Dashboard/Partials/UpcomingRenewals.vue';
 defineProps({
     stats: Object,
 });
+
+const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 18) return 'Good afternoon';
+    return 'Good evening';
+};
 </script>
 
 <template>
@@ -15,29 +22,28 @@ defineProps({
 
     <AuthenticatedLayout>
         <template #header>
-            <h2
-                class="text-xl font-semibold leading-tight text-gray-800"
-            >
-                Dashboard
-            </h2>
+            <div class="space-y-2">
+                <h2 class="text-2xl font-bold text-gray-900">
+                    {{ getGreeting() }}, {{ $page.props.auth.user.name }}
+                </h2>
+                <p class="text-sm text-gray-600">
+                    Here's an overview of your subscription management
+                </p>
+            </div>
         </template>
 
-        <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    <SubscriptionStats :stats="stats" />
+        <div class="py-8">
+            <div class="mx-auto max-w-7xl space-y-8 sm:px-6 lg:px-8">
+                <SubscriptionStats :stats="stats" />
+                
+                <div class="grid gap-8 md:grid-cols-2">
+                    <CategoryBreakdown 
+                        :category-breakdown="stats.categoryBreakdown" 
+                    />
                     
-                    <div class="lg:col-span-2">
-                        <CategoryBreakdown 
-                            :category-breakdown="stats.categoryBreakdown" 
-                        />
-                    </div>
-                    
-                    <div class="md:col-span-2 lg:col-span-3">
-                        <UpcomingRenewals 
-                            :upcoming-renewals="stats.upcomingRenewals" 
-                        />
-                    </div>
+                    <UpcomingRenewals 
+                        :upcoming-renewals="stats.upcomingRenewals" 
+                    />
                 </div>
             </div>
         </div>
