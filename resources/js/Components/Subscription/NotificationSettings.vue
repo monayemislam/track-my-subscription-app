@@ -2,10 +2,13 @@
 import { useForm } from '@inertiajs/vue3';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
+import { useToast } from '@/Composables/useToast';
 
 const props = defineProps({
     subscription: Object,
 });
+
+const { showToast } = useToast();
 
 const form = useForm({
     reminder_days: props.subscription.notification_setting?.reminder_days || 7,
@@ -13,7 +16,15 @@ const form = useForm({
 });
 
 const updateSettings = () => {
-    form.patch(route('notification-settings.update', props.subscription.id));
+    form.patch(route('notification-settings.update', props.subscription.id), {
+        preserveScroll: true,
+        onSuccess: () => {
+            showToast('Notification settings updated successfully');
+        },
+        onError: () => {
+            showToast('Failed to update notification settings', 'error');
+        },
+    });
 };
 </script>
 
@@ -49,7 +60,9 @@ const updateSettings = () => {
                         class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                         @change="updateSettings"
                     />
-                    <span class="ml-2">Enable email notifications for this subscription</span>
+                    <span class="ml-2 text-sm text-gray-600">
+                        Enable email notifications
+                    </span>
                 </label>
                 <InputError :message="form.errors.email_enabled" class="mt-2" />
             </div>

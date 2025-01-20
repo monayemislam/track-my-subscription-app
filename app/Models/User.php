@@ -22,6 +22,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'default_reminder_days',
+        'notification_email_enabled',
+        'notification_email',
+        'notify_before_days',
+        'daily_digest_enabled',
+        'weekly_summary_enabled',
+        'notification_time',
     ];
 
     /**
@@ -39,13 +46,15 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'notification_email_enabled' => 'boolean',
+        'notify_before_days' => 'array',
+        'daily_digest_enabled' => 'boolean',
+        'weekly_summary_enabled' => 'boolean',
+        'default_reminder_days' => 'integer',
+    ];
 
     public function categories(): HasMany
     {

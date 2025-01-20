@@ -23,7 +23,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     Route::resource('subscriptions', SubscriptionController::class);
     
-    // Fix notification settings routes
+    Route::patch('/subscriptions/{subscription}/notification-settings', 
+        [NotificationSettingController::class, 'update'])
+        ->name('notification-settings.update');
+        
     Route::get('/notification-settings/defaults', 
         [NotificationSettingController::class, 'getDefaults'])
         ->name('notification-settings.defaults');
@@ -31,10 +34,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/notification-settings/defaults', 
         [NotificationSettingController::class, 'updateDefaults'])
         ->name('notification-settings.update-defaults');
-        
-    Route::patch('/subscriptions/{subscription}/notification-settings', 
-        [NotificationSettingController::class, 'update'])
-        ->name('notification-settings.update');
 });
 
 Route::middleware('auth')->group(function () {

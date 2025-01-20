@@ -54,7 +54,7 @@ const showingNavigationDropdown = ref(false);
                                 </NavLink>
                                 <NavLink
                                     :href="route('notification-settings.defaults')"
-                                    :active="route().current('notification-settings.defaults')"
+                                    :active="route().current('notification-settings.*')"
                                 >
                                     Notifications
                                 </NavLink>
@@ -179,7 +179,7 @@ const showingNavigationDropdown = ref(false);
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             :href="route('notification-settings.defaults')"
-                            :active="route().current('notification-settings.defaults')"
+                            :active="route().current('notification-settings.*')"
                         >
                             Notifications
                         </ResponsiveNavLink>
