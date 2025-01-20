@@ -6,7 +6,7 @@ const props = defineProps({
     categoryBreakdown: {
         type: Object,
         required: true,
-    },
+    }
 });
 
 const chartCanvas = ref(null);
@@ -18,74 +18,56 @@ onMounted(() => {
     const data = Object.values(props.categoryBreakdown);
     
     new Chart(ctx, {
-        type: 'line',
+        type: 'polarArea',
         data: {
             labels: labels,
             datasets: [{
                 data: data,
-                borderColor: '#6366F1',
-                backgroundColor: 'rgba(99, 102, 241, 0.1)',
-                tension: 0.4,
-                fill: true,
-                pointBackgroundColor: '#6366F1',
-                pointBorderColor: '#fff',
-                pointBorderWidth: 2,
-                pointRadius: 4,
-                pointHoverRadius: 6,
-            }],
+                backgroundColor: [
+                    'rgba(139, 92, 246, 0.7)',  // violet - Development Tools
+                    'rgba(59, 130, 246, 0.7)',  // blue - Recipe
+                    'rgba(16, 185, 129, 0.7)',  // emerald - Writing Tools
+                    'rgba(245, 158, 11, 0.7)',  // amber - Design Tools
+                ],
+                borderWidth: 1
+            }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            scales: {
+                r: {
+                    pointLabels: {
+                        display: true,
+                        centerPointLabels: true,
+                        font: {
+                            size: 12
+                        }
+                    }
+                }
+            },
             plugins: {
                 legend: {
-                    display: false,
-                },
-                title: {
-                    display: true,
-                    text: 'Spending by Category',
-                    font: {
-                        size: 16,
-                        family: "'Inter', sans-serif",
-                        weight: '500',
-                    },
-                    padding: {
-                        bottom: 30,
-                    },
-                    color: '#374151',
-                },
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        color: 'rgba(0, 0, 0, 0.05)',
-                    },
-                    ticks: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 20,
+                        usePointStyle: true,
                         font: {
                             family: "'Inter', sans-serif",
-                        },
-                    },
-                },
-                x: {
-                    grid: {
-                        display: false,
-                    },
-                    ticks: {
-                        font: {
-                            family: "'Inter', sans-serif",
-                        },
-                    },
-                },
-            },
-        },
+                            size: 12
+                        }
+                    }
+                }
+            }
+        }
     });
 });
 </script>
 
 <template>
-    <div class="rounded-lg bg-white p-6 shadow-sm">
-        <div class="h-[400px]">
+    <div class="rounded-2xl bg-white p-6 shadow-lg">
+        <h3 class="mb-6 text-lg font-semibold text-gray-900">Category Breakdown</h3>
+        <div class="relative h-[300px]">
             <canvas ref="chartCanvas"></canvas>
         </div>
     </div>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\Subscription;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -12,30 +14,38 @@ class DashboardController extends Controller
     {
         $user = $request->user();
         
+        // Get basic stats
         $totalSubscriptions = $user->subscriptions()->count();
-        $weeklyCost = $user->subscriptions()
-            ->where('frequency', 'weekly')
-            ->sum('cost');
-        $monthlyCost = $user->subscriptions()
-            ->where('frequency', 'monthly')
-            ->sum('cost');
-        $quarterlyCost = $user->subscriptions()
-            ->where('frequency', 'quarterly')
-            ->sum('cost');
-        $yearlyCost = $user->subscriptions()
-            ->where('frequency', 'yearly')
-            ->sum('cost');
-            
-        $upcomingRenewals = $user->subscriptions()
-            ->where('renewal_date', '<=', now()->addDays($user->default_reminder_days))
-            ->with('category')
-            ->get();
-            
+        
+        // Get costs by frequency
+        $weeklyCost = $user->subscriptions()->where('billing_frequency', 'weekly')->sum('cost');
+        $monthlyCost = $user->subscriptions()->where('billing_frequency', 'monthly')->sum('cost');
+        $quarterlyCost = $user->subscriptions()->where('billing_frequency', 'quarterly')->sum('cost');
+        $yearlyCost = $user->subscriptions()->where('billing_frequency', 'yearly')->sum('cost');
+
+        // Get subscription breakdown by cost
+        $subscriptionBreakdown = $user->subscriptions()
+            ->select('name', 'cost')
+            ->orderByDesc('cost')
+            ->pluck('cost', 'name')
+            ->toArray();
+
+        // Get category breakdown
         $categoryBreakdown = $user->subscriptions()
+            ->select('categories.name', DB::raw('SUM(subscriptions.cost) as total_cost'))
+            ->join('categories', 'categories.id', '=', 'subscriptions.category_id')
+            ->groupBy('categories.id', 'categories.name')
+            ->orderByDesc('total_cost')
+            ->pluck('total_cost', 'name')
+            ->toArray();
+
+        // Get upcoming renewals
+        $upcomingRenewals = $user->subscriptions()
             ->with('category')
-            ->get()
-            ->groupBy('category.name')
-            ->map(fn($group) => $group->sum('cost'));
+            ->whereDate('renewal_date', '>=', now())
+            ->whereDate('renewal_date', '<=', now()->addDays(7))
+            ->orderBy('renewal_date')
+            ->get();
 
         return Inertia::render('Dashboard', [
             'stats' => [
@@ -44,8 +54,9 @@ class DashboardController extends Controller
                 'monthlyCost' => $monthlyCost,
                 'quarterlyCost' => $quarterlyCost,
                 'yearlyCost' => $yearlyCost,
-                'upcomingRenewals' => $upcomingRenewals,
+                'subscriptionBreakdown' => $subscriptionBreakdown,
                 'categoryBreakdown' => $categoryBreakdown,
+                'upcomingRenewals' => $upcomingRenewals,
             ],
         ]);
     }
