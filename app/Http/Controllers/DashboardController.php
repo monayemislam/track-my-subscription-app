@@ -13,8 +13,14 @@ class DashboardController extends Controller
         $user = $request->user();
         
         $totalSubscriptions = $user->subscriptions()->count();
+        $weeklyCost = $user->subscriptions()
+            ->where('frequency', 'weekly')
+            ->sum('cost');
         $monthlyCost = $user->subscriptions()
             ->where('frequency', 'monthly')
+            ->sum('cost');
+        $quarterlyCost = $user->subscriptions()
+            ->where('frequency', 'quarterly')
             ->sum('cost');
         $yearlyCost = $user->subscriptions()
             ->where('frequency', 'yearly')
@@ -34,7 +40,9 @@ class DashboardController extends Controller
         return Inertia::render('Dashboard', [
             'stats' => [
                 'totalSubscriptions' => $totalSubscriptions,
+                'weeklyCost' => $weeklyCost,
                 'monthlyCost' => $monthlyCost,
+                'quarterlyCost' => $quarterlyCost,
                 'yearlyCost' => $yearlyCost,
                 'upcomingRenewals' => $upcomingRenewals,
                 'categoryBreakdown' => $categoryBreakdown,

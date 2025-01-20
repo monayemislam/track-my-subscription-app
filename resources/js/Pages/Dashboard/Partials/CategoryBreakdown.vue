@@ -18,14 +18,20 @@ onMounted(() => {
     const data = Object.values(props.categoryBreakdown);
     
     new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: labels,
             datasets: [{
                 data: data,
-                backgroundColor: '#6366F1',
-                borderRadius: 8,
-                barThickness: 24,
+                borderColor: '#6366F1',
+                backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                tension: 0.4,
+                fill: true,
+                pointBackgroundColor: '#6366F1',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 6,
             }],
         },
         options: {
@@ -53,7 +59,7 @@ onMounted(() => {
                 y: {
                     beginAtZero: true,
                     grid: {
-                        display: false,
+                        color: 'rgba(0, 0, 0, 0.05)',
                     },
                     ticks: {
                         font: {
