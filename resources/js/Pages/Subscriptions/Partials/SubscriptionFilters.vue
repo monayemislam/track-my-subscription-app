@@ -54,22 +54,24 @@ watch(() => form.value.sort, () => {
 </script>
 
 <template>
-    <div class="grid gap-4 sm:grid-cols-3">
-        <div>
-            <InputLabel value="Search" />
+    <div class="flex gap-4 items-center">
+        <!-- Search Input -->
+        <div class="flex-1">
+            <InputLabel value="Search" class="text-xs mb-1" />
             <TextInput
                 v-model="form.search"
                 type="text"
-                class="mt-1 block w-full"
+                class="w-full text-sm py-1.5 px-3"
                 placeholder="Search subscriptions..."
             />
         </div>
 
-        <div>
-            <InputLabel value="Category" />
+        <!-- Category Select -->
+        <div class="w-64">
+            <InputLabel value="Category" class="text-xs mb-1" />
             <select
                 v-model="form.category"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                class="w-full rounded-lg border-gray-200 text-sm py-1.5 px-3 focus:border-gray-300 focus:ring-0"
             >
                 <option value="">All Categories</option>
                 <option
@@ -82,11 +84,12 @@ watch(() => form.value.sort, () => {
             </select>
         </div>
 
-        <div>
-            <InputLabel value="Sort By" />
+        <!-- Sort Select -->
+        <div class="w-48">
+            <InputLabel value="Sort By" class="text-xs mb-1" />
             <select
                 v-model="form.sort"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                class="w-full rounded-lg border-gray-200 text-sm py-1.5 px-3 focus:border-gray-300 focus:ring-0"
             >
                 <option value="renewal_date,asc">Renewal Date (Ascending)</option>
                 <option value="renewal_date,desc">Renewal Date (Descending)</option>
