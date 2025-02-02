@@ -37,6 +37,54 @@ const features = [
     }
 ];
 
+const plans = [
+    {
+        name: 'Basic',
+        price: '$9',
+        period: 'per month',
+        description: 'Perfect for individuals and small teams getting started.',
+        gradient: 'from-blue-500 to-indigo-500',
+        features: [
+            'Up to 10 subscriptions',
+            'Basic analytics',
+            'Email notifications',
+            'Mobile app access',
+            '24/7 support'
+        ]
+    },
+    {
+        name: 'Pro',
+        price: '$29',
+        period: 'per month',
+        description: 'Advanced features for growing businesses.',
+        gradient: 'from-violet-500 to-purple-500',
+        popular: true,
+        features: [
+            'Unlimited subscriptions',
+            'Advanced analytics & insights',
+            'Custom notifications',
+            'Team collaboration',
+            'Priority support',
+            'API access'
+        ]
+    },
+    {
+        name: 'Enterprise',
+        price: '$99',
+        period: 'per month',
+        description: 'Custom solutions for large organizations.',
+        gradient: 'from-fuchsia-500 to-pink-500',
+        features: [
+            'Everything in Pro',
+            'Custom integrations',
+            'Dedicated account manager',
+            'SLA guarantees',
+            'Custom reporting',
+            'SSO & advanced security'
+        ]
+    }
+];
+
 onMounted(() => {
     window.addEventListener('scroll', () => {
         isScrolled.value = window.scrollY > 20;
@@ -360,6 +408,161 @@ onMounted(() => {
                             />
                         </svg>
                     </Link>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="relative py-32 overflow-hidden">
+            <!-- Background Elements -->
+            <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                <div class="absolute top-1/4 left-0 w-[800px] h-[800px] bg-gradient-to-r from-violet-500/10 to-transparent rounded-full blur-3xl animate-blob"></div>
+                <div class="absolute bottom-0 right-0 w-[600px] h-[600px] bg-gradient-to-l from-indigo-500/10 to-transparent rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+            </div>
+
+            <div class="container relative mx-auto px-6">
+                <!-- Section Header -->
+                <div class="text-center mb-20">
+                    <div class="inline-flex items-center px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8">
+                        <span class="text-white/70 text-sm">🎁 Free Forever</span>
+                    </div>
+                    <h2 class="text-5xl md:text-6xl font-bold text-white mb-6">
+                        Start Using
+                        <span class="bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent">
+                            SubTracker Free
+                        </span>
+                    </h2>
+                    <p class="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
+                        All features included. No credit card required.
+                    </p>
+                </div>
+
+                <!-- Free Plan Card -->
+                <div class="max-w-4xl mx-auto">
+                    <div class="group relative">
+                        <!-- Card -->
+                        <div class="relative px-16 py-10 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-sm 
+                                    hover:bg-white/[0.05] transition-all duration-500">
+                            <!-- Price Badge -->
+                            <div class="absolute -top-5 left-1/2 -translate-x-1/2 px-8 py-2 rounded-full 
+                                        bg-gradient-to-r from-violet-500 to-indigo-500 text-white text-lg font-medium">
+                                Free Forever
+                            </div>
+
+                            <!-- Content -->
+                            <div class="text-center mb-12 mt-4">
+                                <h3 class="text-3xl font-bold text-white mb-4">Everything You Need</h3>
+                                <p class="text-lg text-white/60 max-w-2xl mx-auto">
+                                    Track all your subscriptions, get insights, and never miss a payment - completely free.
+                                </p>
+                            </div>
+
+                            <!-- Features Grid - Centered Two Columns -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-8 mb-12 max-w-3xl mx-auto">
+                                <div class="flex items-center gap-4">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-r from-indigo-500/20 to-violet-500/20 
+                                                border border-white/5 flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                        </svg>
+                                    </div>
+                                    <span class="text-lg text-white/80">Unlimited Subscriptions</span>
+                                </div>
+
+                                <div class="flex items-center gap-4">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-r from-indigo-500/20 to-violet-500/20 
+                                                border border-white/5 flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                    </div>
+                                    <span class="text-lg text-white/80">Smart Tracking System</span>
+                                </div>
+
+                                <div class="flex items-center gap-4">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-r from-indigo-500/20 to-violet-500/20 
+                                                border border-white/5 flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                                        </svg>
+                                    </div>
+                                    <span class="text-lg text-white/80">AI-Powered Insights</span>
+                                </div>
+
+                                <div class="flex items-center gap-4">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-r from-indigo-500/20 to-violet-500/20 
+                                                border border-white/5 flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                        </svg>
+                                    </div>
+                                    <span class="text-lg text-white/80">Email Notifications</span>
+                                </div>
+
+                                <div class="flex items-center gap-4">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-r from-indigo-500/20 to-violet-500/20 
+                                                border border-white/5 flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                        </svg>
+                                    </div>
+                                    <span class="text-lg text-white/80">Mobile App Access</span>
+                                </div>
+
+                                <div class="flex items-center gap-4">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-r from-indigo-500/20 to-violet-500/20 
+                                                border border-white/5 flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                                        </svg>
+                                    </div>
+                                    <span class="text-lg text-white/80">Custom Categories</span>
+                                </div>
+
+                                <div class="flex items-center gap-4">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-r from-indigo-500/20 to-violet-500/20 
+                                                border border-white/5 flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                        </svg>
+                                    </div>
+                                    <span class="text-lg text-white/80">Spending Analytics</span>
+                                </div>
+
+                                <div class="flex items-center gap-4">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-r from-indigo-500/20 to-violet-500/20 
+                                                border border-white/5 flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                    </div>
+                                    <span class="text-lg text-white/80">Smart Reminders</span>
+                                </div>
+                            </div>
+
+                            <!-- CTA Button -->
+                            <div class="text-center">
+                                <Link 
+                                    v-if="canRegister"
+                                    :href="route('register')"
+                                    class="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r 
+                                           from-violet-500 to-indigo-500 rounded-xl text-white text-lg font-medium
+                                           hover:from-violet-600 hover:to-indigo-600 transition-all duration-200"
+                                >
+                                    Get Started Now
+                                    <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-200" 
+                                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                    </svg>
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Text -->
+                    <p class="text-center mt-6 text-white/60">
+                        No credit card required. No hidden fees. Start tracking your subscriptions today.
+                    </p>
                 </div>
             </div>
         </section>
