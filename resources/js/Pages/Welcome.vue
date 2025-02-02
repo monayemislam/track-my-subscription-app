@@ -85,6 +85,40 @@ const plans = [
     }
 ];
 
+const openFaqIndex = ref(0); // First FAQ is open by default
+
+const faqs = [
+    {
+        question: 'How does SubTracker work?',
+        answer: 'SubTracker automatically detects and tracks your subscriptions by analyzing your connected accounts. Our AI-powered system categorizes and organizes everything in one place.',
+        icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2'
+    },
+    {
+        question: 'Is my financial data secure?',
+        answer: 'Yes, we use bank-level encryption and security measures to protect your data. We never store your actual account credentials and use read-only access for tracking.',
+        icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z'
+    },
+    {
+        question: 'Will SubTracker always be free?',
+        answer: 'Yes! SubTracker core features will always remain free for all users. We believe in providing value without any hidden costs.',
+        icon: 'M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z'
+    },
+    {
+        question: 'How accurate is the AI tracking system?',
+        answer: 'Our AI system has a 99.9% accuracy rate in detecting and categorizing subscriptions. It continuously learns and improves from user feedback.',
+        icon: 'M13 10V3L4 14h7v7l9-11h-7z'
+    },
+    {
+        question: 'Can I track subscriptions in different currencies?',
+        answer: 'Yes, SubTracker supports multiple currencies and automatically converts them to your preferred currency for easy tracking.',
+        icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+    }
+];
+
+const toggleFaq = (index) => {
+    openFaqIndex.value = openFaqIndex.value === index ? -1 : index;
+};
+
 onMounted(() => {
     window.addEventListener('scroll', () => {
         isScrolled.value = window.scrollY > 20;
@@ -566,6 +600,95 @@ onMounted(() => {
                 </div>
             </div>
         </section>
+
+        <!-- FAQ Section -->
+        <section class="relative py-32 overflow-hidden">
+            <!-- Background Elements -->
+            <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                <div class="absolute bottom-0 left-0 w-[800px] h-[800px] bg-gradient-to-r from-violet-500/10 to-transparent rounded-full blur-3xl animate-blob"></div>
+                <div class="absolute top-1/2 right-0 w-[600px] h-[600px] bg-gradient-to-l from-indigo-500/10 to-transparent rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+            </div>
+
+            <div class="container relative mx-auto px-6">
+                <!-- Section Header -->
+                <div class="text-center mb-20">
+                    <div class="inline-flex items-center px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8">
+                        <span class="text-white/70 text-sm">❓ Common Questions</span>
+                    </div>
+                    <h2 class="text-5xl md:text-6xl font-bold text-white mb-6">
+                        Frequently Asked
+                        <span class="bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent">
+                            Questions
+                        </span>
+                    </h2>
+                    <p class="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
+                        Everything you need to know about SubTracker and how it works
+                    </p>
+                </div>
+
+                <!-- FAQ Grid -->
+                <div class="max-w-4xl mx-auto grid gap-4">
+                    <div v-for="(faq, index) in faqs" 
+                         :key="index" 
+                         class="group"
+                         @click="toggleFaq(index)">
+                        <div class="relative p-6 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-sm 
+                                    hover:bg-white/[0.05] transition-all duration-300 cursor-pointer">
+                            <div class="flex items-start gap-6">
+                                <!-- Icon -->
+                                <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-r from-indigo-500/20 to-violet-500/20 
+                                            border border-white/5 flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="faq.icon"/>
+                                    </svg>
+                                </div>
+
+                                <!-- Content -->
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="text-xl font-semibold text-white">{{ faq.question }}</h3>
+                                        <!-- Toggle Icon -->
+                                        <svg 
+                                            class="w-5 h-5 text-white/60 transition-transform duration-300"
+                                            :class="{ 'rotate-180': openFaqIndex === index }"
+                                            fill="none" 
+                                            viewBox="0 0 24 24" 
+                                            stroke="currentColor"
+                                        >
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                        </svg>
+                                    </div>
+                                    
+                                    <!-- Answer with smooth transition -->
+                                    <div 
+                                        class="overflow-hidden transition-all duration-300"
+                                        :class="openFaqIndex === index ? 'max-h-48 mt-4' : 'max-h-0'"
+                                    >
+                                        <p class="text-white/60 leading-relaxed">{{ faq.answer }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Hover Effect -->
+                            <div class="absolute -inset-px rounded-2xl bg-gradient-to-r from-violet-500/20 to-indigo-500/20 
+                                        opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-300"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom CTA -->
+                <div class="text-center mt-16">
+                    <div class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/5 border border-white/10 
+                                backdrop-blur-sm text-white/60 hover:bg-white/[0.07] hover:text-white/80 transition-all duration-300">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                        </svg>
+                        Still have questions? Contact our support team
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 </template>
 
@@ -593,5 +716,10 @@ onMounted(() => {
 .backdrop-blur-sm {
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
+}
+
+/* Optional: Add smooth scrolling for the content */
+.overflow-hidden {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 </style>
