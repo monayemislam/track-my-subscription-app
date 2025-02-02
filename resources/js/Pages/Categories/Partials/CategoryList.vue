@@ -1,15 +1,41 @@
 <script setup>
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
+import { useToast } from '@/Composables/useToast';
+import ConfirmationModal from '@/Components/UI/ConfirmationModal.vue';
 
 const props = defineProps({
     categories: Array
 });
 
-const deleteCategory = (id) => {
-    if (confirm('Are you sure you want to delete this category?')) {
-        router.delete(route('categories.destroy', id));
+const { showToast } = useToast();
+const showDeleteModal = ref(false);
+const categoryToDelete = ref(null);
+
+const confirmDelete = (category) => {
+    // First check if category has subscriptions
+    if (category.subscriptions_count > 0) {
+        showToast("Cannot delete category that has subscriptions. Please delete the subscriptions first.", 'error');
+        return;
     }
+
+    // If no subscriptions, show delete confirmation modal
+    categoryToDelete.value = category;
+    showDeleteModal.value = true;
+};
+
+const handleDelete = () => {
+    router.delete(route('categories.destroy', categoryToDelete.value.id), {
+        preserveScroll: true,
+        onSuccess: () => {
+            showToast('Category deleted successfully');
+            showDeleteModal.value = false;
+        },
+        onError: () => {
+            showToast('Failed to delete category', 'error');
+            showDeleteModal.value = false;
+        },
+    });
 };
 </script>
 
@@ -42,7 +68,7 @@ const deleteCategory = (id) => {
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <button
-                                @click="deleteCategory(category.id)"
+                                @click="confirmDelete(category)"
                                 class="text-red-600 hover:text-red-900"
                             >
                                 Delete
@@ -52,5 +78,13 @@ const deleteCategory = (id) => {
                 </tbody>
             </table>
         </div>
+
+        <ConfirmationModal
+            :show="showDeleteModal"
+            title="Delete Category"
+            message="Are you sure you want to delete this category? This action cannot be undone."
+            @confirm="handleDelete"
+            @cancel="showDeleteModal = false"
+        />
     </div>
 </template> 

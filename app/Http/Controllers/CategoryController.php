@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -87,12 +88,13 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category): RedirectResponse
     {
-        $this->authorize('delete', $category);
+        Gate::authorize('delete', $category);
 
         if (!$category->is_default) {
             $category->delete();
+            return redirect()->back()->with('success', 'Category deleted successfully.');
         }
 
-        return redirect()->route('categories.index');
+        return redirect()->back()->with('error', 'Cannot delete default category.');
     }
 }
