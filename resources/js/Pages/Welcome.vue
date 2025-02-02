@@ -85,8 +85,6 @@ const plans = [
     }
 ];
 
-const openFaqIndex = ref(0); // First FAQ is open by default
-
 const faqs = [
     {
         question: 'How does SubTracker work?',
@@ -115,14 +113,81 @@ const faqs = [
     }
 ];
 
-const toggleFaq = (index) => {
-    openFaqIndex.value = openFaqIndex.value === index ? -1 : index;
+const testimonials = [
+    {
+        quote: 'SubTracker has completely transformed how I manage my subscriptions. The AI insights have helped me save over $200 monthly!',
+        author: 'Sarah Mitchell',
+        role: 'Business Owner',
+        rating: 5,
+        gradient: 'from-indigo-500/20 to-violet-500/20'
+    },
+    {
+        quote: 'The smart reminders ensure I never miss a payment. It like having a personal subscription assistant.',
+        author: 'David Chen',
+        role: 'Software Engineer',
+        rating: 5,
+        gradient: 'from-violet-500/20 to-fuchsia-500/20'
+    },
+    {
+        quote: 'Finally, a tool that makes subscription management effortless. The interface is beautiful and intuitive.',
+        author: 'Emma Thompson',
+        role: 'Digital Creator',
+        rating: 5,
+        gradient: 'from-fuchsia-500/20 to-indigo-500/20'
+    },
+    {
+        quote: 'The AI recommendations helped me optimize my subscriptions and save money every month.',
+        author: 'Michael Brown',
+        role: 'Product Manager',
+        rating: 5,
+        gradient: 'from-purple-500/20 to-pink-500/20'
+    },
+    {
+        quote: 'Best subscription tracker I haveve ever used. Clean interface and powerful features.',
+        author: 'Lisa Wang',
+        role: 'Startup Founder',
+        rating: 5,
+        gradient: 'from-blue-500/20 to-indigo-500/20'
+    },
+];
+
+const scrollContainer1 = ref(null);
+const scrollContainer2 = ref(null);
+const isScrolling = ref(false);
+let scrollInterval1, scrollInterval2;
+
+const startAutoScroll = () => {
+    if (!isScrolling.value) return;
+    
+    // First row - Left to Right
+    scrollInterval1 = setInterval(() => {
+        if (scrollContainer1.value) {
+            scrollContainer1.value.scrollLeft += 1;
+            if (scrollContainer1.value.scrollLeft >= scrollContainer1.value.scrollWidth - scrollContainer1.value.clientWidth) {
+                scrollContainer1.value.scrollLeft = 0;
+            }
+        }
+    }, 20);
+
+    // Second row - Right to Left
+    scrollInterval2 = setInterval(() => {
+        if (scrollContainer2.value) {
+            scrollContainer2.value.scrollLeft -= 1;
+            if (scrollContainer2.value.scrollLeft <= 0) {
+                scrollContainer2.value.scrollLeft = scrollContainer2.value.scrollWidth - scrollContainer2.value.clientWidth;
+            }
+        }
+    }, 20);
+};
+
+const stopAutoScroll = () => {
+    clearInterval(scrollInterval1);
+    clearInterval(scrollInterval2);
 };
 
 onMounted(() => {
-    window.addEventListener('scroll', () => {
-        isScrolled.value = window.scrollY > 20;
-    });
+    isScrolling.value = true;
+    startAutoScroll();
 });
 </script>
 
@@ -601,6 +666,168 @@ onMounted(() => {
             </div>
         </section>
 
+        <!-- Testimonials Section -->
+        <section class="relative min-h-screen py-32 overflow-hidden">
+            <!-- Background Elements -->
+            <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                <div class="absolute top-1/4 right-0 w-[800px] h-[800px] bg-gradient-to-l from-indigo-500/10 to-transparent rounded-full blur-3xl animate-blob"></div>
+                <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-r from-violet-500/10 to-transparent rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+                
+                <!-- Grid Pattern -->
+                <div class="absolute inset-0" 
+                    style="background-image: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 2px, transparent 2px); 
+                           background-size: 48px 48px;
+                           opacity: 0.3;
+                           transform: rotate(-2deg) scale(1.5);">
+                </div>
+            </div>
+
+            <div class="relative container mx-auto px-6">
+                <!-- Section Header -->
+                <div class="text-center mb-20">
+                    <div class="inline-flex items-center px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8">
+                        <span class="text-white/70 text-sm">💬 User Stories</span>
+                    </div>
+                    <h2 class="text-5xl md:text-6xl font-bold text-white mb-6">
+                        Loved by
+                        <span class="bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent">
+                            Thousands
+                        </span>
+                    </h2>
+                    <p class="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
+                        See what our users are saying about their experience with SubTracker
+                    </p>
+                </div>
+
+                <!-- Two Row Scrolling Testimonials -->
+                <div class="relative space-y-8">
+                    <!-- First Row - Left to Right -->
+                    <div class="relative">
+                        <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0A0F1C] to-transparent z-10"></div>
+                        <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0A0F1C] to-transparent z-10"></div>
+
+                        <div ref="scrollContainer1"
+                             class="flex gap-8 overflow-x-auto scrollbar-hide py-8 px-4"
+                             @mouseenter="stopAutoScroll"
+                             @mouseleave="startAutoScroll">
+                            <div v-for="(testimonial, index) in testimonials.slice(0, 5)" 
+                                 :key="'testimonial1-' + index" 
+                                 class="flex-none w-[400px] group">
+                                <div class="relative h-full p-8 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-sm 
+                                            hover:bg-white/[0.05] transition-all duration-300">
+                                    <!-- Quote Icon -->
+                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-r border border-white/5 flex items-center justify-center mb-6"
+                                         :class="testimonial.gradient">
+                                        <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                                        </svg>
+                                    </div>
+
+                                    <!-- Content -->
+                                    <blockquote class="text-lg text-white/80 mb-6 leading-relaxed">
+                                        "{{ testimonial.quote }}"
+                                    </blockquote>
+
+                                    <!-- Author -->
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-xl bg-gradient-to-r border border-white/5 flex items-center justify-center"
+                                             :class="testimonial.gradient">
+                                            <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <div class="font-semibold text-white">{{ testimonial.author }}</div>
+                                            <div class="text-sm text-white/60">{{ testimonial.role }}</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Rating -->
+                                    <div class="absolute top-8 right-8 flex gap-1">
+                                        <svg v-for="star in testimonial.rating" 
+                                             :key="'star-' + star" 
+                                             class="w-5 h-5 text-yellow-500" 
+                                             fill="currentColor" 
+                                             viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                        </svg>
+                                    </div>
+
+                                    <!-- Hover Effect -->
+                                    <div class="absolute -inset-px rounded-2xl bg-gradient-to-r from-violet-500/20 to-indigo-500/20 
+                                                opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-300"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Second Row - Right to Left -->
+                    <div class="relative">
+                        <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0A0F1C] to-transparent z-10"></div>
+                        <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0A0F1C] to-transparent z-10"></div>
+
+                        <div ref="scrollContainer2"
+                             class="flex gap-8 overflow-x-auto scrollbar-hide py-8 px-4"
+                             @mouseenter="stopAutoScroll"
+                             @mouseleave="startAutoScroll">
+                            <div v-for="(testimonial, index) in testimonials.slice(5, 10).reverse()" 
+                                 :key="'testimonial2-' + index" 
+                                 class="flex-none w-[400px] group">
+                                <div class="relative h-full p-8 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-sm 
+                                            hover:bg-white/[0.05] transition-all duration-300">
+                                    <!-- Quote Icon -->
+                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-r border border-white/5 flex items-center justify-center mb-6"
+                                         :class="testimonial.gradient">
+                                        <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                                        </svg>
+                                    </div>
+
+                                    <!-- Content -->
+                                    <blockquote class="text-lg text-white/80 mb-6 leading-relaxed">
+                                        "{{ testimonial.quote }}"
+                                    </blockquote>
+
+                                    <!-- Author -->
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-xl bg-gradient-to-r border border-white/5 flex items-center justify-center"
+                                             :class="testimonial.gradient">
+                                            <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <div class="font-semibold text-white">{{ testimonial.author }}</div>
+                                            <div class="text-sm text-white/60">{{ testimonial.role }}</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Rating -->
+                                    <div class="absolute top-8 right-8 flex gap-1">
+                                        <svg v-for="star in testimonial.rating" 
+                                             :key="'star-' + star" 
+                                             class="w-5 h-5 text-yellow-500" 
+                                             fill="currentColor" 
+                                             viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                        </svg>
+                                    </div>
+
+                                    <!-- Hover Effect -->
+                                    <div class="absolute -inset-px rounded-2xl bg-gradient-to-r from-violet-500/20 to-indigo-500/20 
+                                                opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-300"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- FAQ Section -->
         <section class="relative py-32 overflow-hidden">
             <!-- Background Elements -->
@@ -627,45 +854,20 @@ onMounted(() => {
                 </div>
 
                 <!-- FAQ Grid -->
-                <div class="max-w-4xl mx-auto grid gap-4">
-                    <div v-for="(faq, index) in faqs" 
-                         :key="index" 
-                         class="group"
-                         @click="toggleFaq(index)">
-                        <div class="relative p-6 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-sm 
-                                    hover:bg-white/[0.05] transition-all duration-300 cursor-pointer">
+                <div class="max-w-4xl mx-auto grid gap-6">
+                    <div v-for="(faq, index) in faqs" :key="index" class="group">
+                        <div class="relative p-8 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-sm 
+                                    hover:bg-white/[0.05] transition-all duration-300">
                             <div class="flex items-start gap-6">
-                                <!-- Icon -->
                                 <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-r from-indigo-500/20 to-violet-500/20 
                                             border border-white/5 flex items-center justify-center">
                                     <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="faq.icon"/>
                                     </svg>
                                 </div>
-
-                                <!-- Content -->
                                 <div class="flex-1">
-                                    <div class="flex items-center justify-between">
-                                        <h3 class="text-xl font-semibold text-white">{{ faq.question }}</h3>
-                                        <!-- Toggle Icon -->
-                                        <svg 
-                                            class="w-5 h-5 text-white/60 transition-transform duration-300"
-                                            :class="{ 'rotate-180': openFaqIndex === index }"
-                                            fill="none" 
-                                            viewBox="0 0 24 24" 
-                                            stroke="currentColor"
-                                        >
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                        </svg>
-                                    </div>
-                                    
-                                    <!-- Answer with smooth transition -->
-                                    <div 
-                                        class="overflow-hidden transition-all duration-300"
-                                        :class="openFaqIndex === index ? 'max-h-48 mt-4' : 'max-h-0'"
-                                    >
-                                        <p class="text-white/60 leading-relaxed">{{ faq.answer }}</p>
-                                    </div>
+                                    <h3 class="text-xl font-semibold text-white mb-4">{{ faq.question }}</h3>
+                                    <p class="text-white/60 leading-relaxed">{{ faq.answer }}</p>
                                 </div>
                             </div>
 
@@ -718,8 +920,11 @@ onMounted(() => {
     -webkit-backdrop-filter: blur(8px);
 }
 
-/* Optional: Add smooth scrolling for the content */
-.overflow-hidden {
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
 }
 </style>
