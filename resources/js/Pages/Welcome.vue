@@ -16,6 +16,27 @@ const stats = [
     { value: '98%', label: 'Satisfaction Rate', trend: 'Based on 1000+ reviews' },
 ];
 
+const features = [
+    {
+        title: 'Smart Tracking',
+        description: 'Automatically detect and track all your subscriptions in one unified dashboard.',
+        icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2',
+        gradient: 'from-blue-500 to-indigo-500'
+    },
+    {
+        title: 'AI-Powered Insights',
+        description: 'Get personalized recommendations to optimize your subscription spending.',
+        icon: 'M13 10V3L4 14h7v7l9-11h-7z',
+        gradient: 'from-violet-500 to-purple-500'
+    },
+    {
+        title: 'Smart Reminders',
+        description: 'Never miss a payment with customizable notifications and renewal alerts.',
+        icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9',
+        gradient: 'from-fuchsia-500 to-pink-500'
+    }
+];
+
 onMounted(() => {
     window.addEventListener('scroll', () => {
         isScrolled.value = window.scrollY > 20;
@@ -233,6 +254,112 @@ onMounted(() => {
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="relative py-32 overflow-hidden">
+            <!-- Background Elements -->
+            <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                <div class="absolute top-1/3 right-0 w-[900px] h-[900px] bg-gradient-to-l from-indigo-500/10 to-transparent rounded-full blur-3xl animate-blob animation-delay-4000"></div>
+                <div class="absolute bottom-0 left-0 w-[900px] h-[900px] bg-gradient-to-r from-violet-500/10 to-transparent rounded-full blur-3xl animate-blob"></div>
+            </div>
+
+            <div class="container relative mx-auto px-6">
+                <!-- Section Header -->
+                <div class="text-center mb-24">
+                    <div class="inline-flex items-center px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8">
+                        <span class="text-white/70 text-sm">⚡️ Powerful Features</span>
+                    </div>
+                    <h2 class="text-5xl md:text-6xl font-bold text-white mb-6">
+                        Designed for
+                        <span class="bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent">
+                            Modern Teams
+                        </span>
+                    </h2>
+                    <p class="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
+                        Everything you need to take control of your subscriptions and optimize your spending
+                    </p>
+                </div>
+
+                <!-- Features Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <div 
+                        v-for="(feature, index) in features" 
+                        :key="index"
+                        class="group relative"
+                    >
+                        <!-- Card -->
+                        <div class="relative h-full p-8 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-sm 
+                                    hover:bg-white/[0.05] transition-all duration-500">
+                            <!-- Icon -->
+                            <div class="mb-8 relative">
+                                <div class="w-14 h-14 rounded-xl bg-gradient-to-r border border-white/10 backdrop-blur-sm
+                                          flex items-center justify-center relative z-10"
+                                     :class="feature.gradient">
+                                    <svg 
+                                        class="w-7 h-7 text-white" 
+                                        fill="none" 
+                                        stroke="currentColor" 
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path 
+                                            :d="feature.icon" 
+                                            stroke-linecap="round" 
+                                            stroke-linejoin="round" 
+                                            stroke-width="2"
+                                        />
+                                    </svg>
+                                </div>
+                                <!-- Glow Effect -->
+                                <div 
+                                    class="absolute -inset-2 rounded-xl bg-gradient-to-r opacity-0 group-hover:opacity-20 blur-xl transition-all duration-500"
+                                    :class="feature.gradient"
+                                ></div>
+                            </div>
+
+                            <!-- Content -->
+                            <h3 class="text-2xl font-semibold text-white mb-4">
+                                {{ feature.title }}
+                            </h3>
+                            <p class="text-lg text-white/60 leading-relaxed">
+                                {{ feature.description }}
+                            </p>
+
+                            <!-- Hover Line -->
+                            <div class="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r group-hover:w-full transition-all duration-500"
+                                 :class="feature.gradient">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom CTA -->
+                <div class="text-center mt-24">
+                    <Link 
+                        v-if="canRegister"
+                        :href="route('register')"
+                        class="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-white/5 border border-white/10 
+                               hover:bg-white/[0.07] transition-all duration-300 group"
+                    >
+                        <span class="text-lg text-white/90 group-hover:text-white transition-colors">
+                            Explore All Features
+                        </span>
+                        <svg 
+                            class="w-5 h-5 text-white/70 group-hover:text-white transition-colors transform group-hover:translate-x-1 duration-200" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24"
+                        >
+                            <path 
+                                stroke-linecap="round" 
+                                stroke-linejoin="round" 
+                                stroke-width="2" 
+                                d="M17 8l4 4m0 0l-4 4m4-4H3"
+                            />
+                        </svg>
+                    </Link>
                 </div>
             </div>
         </section>
