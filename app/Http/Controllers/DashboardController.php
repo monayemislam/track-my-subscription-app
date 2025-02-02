@@ -14,49 +14,66 @@ class DashboardController extends Controller
     {
         $user = $request->user();
         
-        // Get basic stats
-        $totalSubscriptions = $user->subscriptions()->count();
+        // Debug the query first
+        \Log::info('Checking subscription breakdown query');
         
-        // Get costs by frequency
-        $weeklyCost = $user->subscriptions()->where('billing_frequency', 'weekly')->sum('cost');
-        $monthlyCost = $user->subscriptions()->where('billing_frequency', 'monthly')->sum('cost');
-        $quarterlyCost = $user->subscriptions()->where('billing_frequency', 'quarterly')->sum('cost');
-        $yearlyCost = $user->subscriptions()->where('billing_frequency', 'yearly')->sum('cost');
-
-        // Get subscription breakdown by cost
+        // Get subscription breakdown data using SQLite compatible date formatting
         $subscriptionBreakdown = $user->subscriptions()
-            ->select('name', 'cost')
-            ->orderByDesc('cost')
-            ->pluck('cost', 'name')
+            ->select(
+                DB::raw('strftime("%Y-%m", renewal_date) as month'),
+                DB::raw('SUM(cost) as total_cost')
+            )
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get()
+            ->mapWithKeys(function ($item) {
+                return [$item->month => (float) $item->total_cost];
+            })
             ->toArray();
+
+        // Log the breakdown data to verify
+        \Log::info('Subscription Breakdown:', $subscriptionBreakdown);
 
         // Get category breakdown
         $categoryBreakdown = $user->subscriptions()
             ->select('categories.name', DB::raw('SUM(subscriptions.cost) as total_cost'))
             ->join('categories', 'categories.id', '=', 'subscriptions.category_id')
             ->groupBy('categories.id', 'categories.name')
-            ->orderByDesc('total_cost')
-            ->pluck('total_cost', 'name')
+            ->orderBy('categories.name')
+            ->get()
+            ->mapWithKeys(function ($item) {
+                return [$item->name => (float) $item->total_cost];
+            })
             ->toArray();
 
-        // Get upcoming renewals
-        $upcomingRenewals = $user->subscriptions()
-            ->with('category')
-            ->whereDate('renewal_date', '>=', now())
-            ->whereDate('renewal_date', '<=', now()->addDays(7))
-            ->orderBy('renewal_date')
-            ->get();
+        // Calculate subscription costs by frequency
+        $subscriptionCosts = [
+            'weekly' => $user->subscriptions()
+                ->where('frequency', 'weekly')
+                ->sum('cost'),
+            'monthly' => $user->subscriptions()
+                ->where('frequency', 'monthly')
+                ->sum('cost'),
+            'quarterly' => $user->subscriptions()
+                ->where('frequency', 'quarterly')
+                ->sum('cost'),
+            'yearly' => $user->subscriptions()
+                ->where('frequency', 'yearly')
+                ->sum('cost')
+        ];
 
         return Inertia::render('Dashboard', [
             'stats' => [
-                'totalSubscriptions' => $totalSubscriptions,
-                'weeklyCost' => $weeklyCost,
-                'monthlyCost' => $monthlyCost,
-                'quarterlyCost' => $quarterlyCost,
-                'yearlyCost' => $yearlyCost,
+                'subscriptionCosts' => $subscriptionCosts,
+                'totalSubscriptions' => $user->subscriptions()->count(),
                 'subscriptionBreakdown' => $subscriptionBreakdown,
                 'categoryBreakdown' => $categoryBreakdown,
-                'upcomingRenewals' => $upcomingRenewals,
+                'upcomingRenewals' => $user->subscriptions()
+                    ->with('category')
+                    ->whereDate('renewal_date', '>=', now())
+                    ->whereDate('renewal_date', '<=', now()->addDays(7))
+                    ->orderBy('renewal_date')
+                    ->get()
             ],
         ]);
     }

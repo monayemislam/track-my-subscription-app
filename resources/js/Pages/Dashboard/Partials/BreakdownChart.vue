@@ -1,46 +1,53 @@
 <script setup>
-import { onMounted, ref } from 'vue';
-import { Chart } from 'chart.js/auto';
+import { ref, onMounted, watch } from 'vue';
+import Chart from 'chart.js/auto';
 
 const props = defineProps({
     breakdownData: {
         type: Object,
-        required: true,
+        required: true
     },
     title: {
         type: String,
-        required: true
+        default: 'Subscription Breakdown'
     }
 });
 
 const chartCanvas = ref(null);
+let chart = null;
 
-const formatCurrency = (amount) => {
-    const value = amount || 0;
+const formatCurrency = (value) => {
     return new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'USD'
+        currency: 'USD',
+        minimumFractionDigits: 2
     }).format(value);
 };
 
-onMounted(() => {
-    if (chartCanvas.value) {
+const initChart = () => {
+    if (chartCanvas.value && props.breakdownData) {
         const ctx = chartCanvas.value.getContext('2d');
-        const labels = Object.keys(props.breakdownData || {});
-        const data = Object.values(props.breakdownData || {});
         
-        new Chart(ctx, {
+        // Destroy existing chart if it exists
+        if (chart) {
+            chart.destroy();
+        }
+
+        const labels = Object.keys(props.breakdownData);
+        const data = Object.values(props.breakdownData);
+
+        chart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: labels,
                 datasets: [{
                     label: 'Subscription Cost',
                     data: data,
-                    borderColor: 'rgba(139, 92, 246, 1)',
+                    borderColor: 'rgb(139, 92, 246)',
                     backgroundColor: 'rgba(139, 92, 246, 0.1)',
                     tension: 0.4,
                     fill: true,
-                    pointBackgroundColor: 'rgba(139, 92, 246, 1)',
+                    pointBackgroundColor: 'rgb(139, 92, 246)',
                     pointBorderColor: '#fff',
                     pointBorderWidth: 2,
                     pointRadius: 6
@@ -62,11 +69,16 @@ onMounted(() => {
                         ticks: {
                             callback: value => formatCurrency(value)
                         }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
                     }
                 },
                 plugins: {
                     legend: {
-                        position: 'top'
+                        display: false
                     },
                     tooltip: {
                         callbacks: {
@@ -77,6 +89,15 @@ onMounted(() => {
             }
         });
     }
+};
+
+// Watch for changes in breakdown data
+watch(() => props.breakdownData, () => {
+    initChart();
+}, { deep: true });
+
+onMounted(() => {
+    initChart();
 });
 </script>
 
